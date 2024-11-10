@@ -1,0 +1,56 @@
+services:
+  garudacbt_webapp:
+    build: ../ # you can customize this path into your garudacbt project
+    container_name: garudacbt_webapp
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2000M
+          pids: 15
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+    volumes:
+      - /opt/garudacbt:/var/www/html/cbt:rw
+      - garudacbt_app_uploads:/var/www/html/cbt/uploads:rw
+    networks:
+      - garudacbt
+  
+  garudacbt_webserver_nginx:
+    container_name: garudacbt_webserver
+    image: nginx:mainline-alpine-slim
+    restart: unless-stopped
+    volumes:
+      - /opt/garudacbt:/var/www/html/cbt:rw
+      - garudacbt_app_uploads:/var/www/html/cbt/uploads:rw
+      - garudacbt_nginx_certs:/etc/letsencrypt:rw
+      - garudacbt_nginx:/etc/nginx:rw
+    ports:
+      - "80:80"
+      - "443:443"
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 1000M
+          pids: 30
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+    depends_on:
+      - garudacbt_webapp
+    networks:
+      - garudacbt
+
+networks:
+  garudacbt:
+    name: garudacbt
+    external: true
+volumes:
+  garudacbt_app:
+    external: true
+  garudacbt_app_uploads:
+  garudacbt_nginx:
+  garudacbt_nginx_certs:
