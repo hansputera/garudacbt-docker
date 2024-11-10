@@ -13,8 +13,7 @@ services:
           cpus: '0.25'
           memory: 128M
     volumes:
-      - ./php/php.ini:/usr/local/etc/php/php.ini-production
-      - ./php/php.ini:/usr/local/etc/php/php.ini-development
+      - ./php/php.ini:/usr/local/etc/php/php.ini
       - /opt/garudacbt:/var/www/html/cbt:rw
       - garudacbt_app_uploads:/var/www/html/cbt/uploads:rw
     networks:
