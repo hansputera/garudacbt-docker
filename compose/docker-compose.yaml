@@ -1,6 +1,6 @@
 services:
   garudacbt_webapp:
-    build: ../ # you can customize this path into your garudacbt project
+    build: ../ # you can customize this path
     container_name: garudacbt_webapp
     restart: unless-stopped
     deploy:
@@ -13,6 +13,8 @@ services:
           cpus: '0.25'
           memory: 128M
     volumes:
+      - ./php/php.ini:/usr/local/etc/php/php.ini-production
+      - ./php/php.ini:/usr/local/etc/php/php.ini-development
       - /opt/garudacbt:/var/www/html/cbt:rw
       - garudacbt_app_uploads:/var/www/html/cbt/uploads:rw
     networks:
